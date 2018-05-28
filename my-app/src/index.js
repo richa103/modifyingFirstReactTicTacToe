@@ -59,21 +59,24 @@ class Game extends React.Component {
     }
   };
     handleClick(i) {
-      const history = this.state.history.slice(0, this.state.stepNumber + 1);
-      const current = history[history.length - 1];
+      const history = this.state.history.slice(0, this.state.stepNumber + 1); //copies everything, up to that point in time
+
+      const current = history[history.length - 1]; //copies the last element
+      const historyCurrentI = this.state.currentI.slice(0, this.state.stepNumber); //copy everything up to that point in time
+
       const squares = current.squares.slice();
-      const currentI = this.state.currentI.slice(0, this.state.stepNumber + 1);
+
       if(calculateWinner(squares) || squares[i]) {
         return;
       }
       squares[i] = this.state.xIsNext ? 'X' : 'O';
       this.setState({
-        history: history.concat([{
+        history: history.concat([{ //adds that last element to the end of the array
           squares: squares,
         }]),
         stepNumber: history.length,
         xIsNext: !this.state.xIsNext,
-        currentI: currentI.concat(i),
+        currentI: historyCurrentI.concat(i),
       });
     }
 
@@ -81,7 +84,7 @@ class Game extends React.Component {
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
-    currentI: this.state.currentI.slice(0, step), //go back to last game move, with which squared filled
+    //currentI: this.state.currentI.slice(0, step), //go back to last game move, with which squared filled
     });
   }
 
@@ -94,9 +97,9 @@ const winner = calculateWinner(current.squares);
 const currentI = this.state.currentI; //update current squared filled on the last move made
 
 const moves = history.map((step, move) => {
-const col = currentI[move - 1] % 3 + 1; //calculate column
-const row = (currentI[move - 1] >= 2) ? //calculate row
-  ((currentI[move - 1] >= 2 && currentI[move - 1] <=5) ?
+const col = currentI[move -1] % 3 + 1; //calculate column
+const row = (currentI[move - 1] > 2) ? //calculate row
+  ((currentI[move - 1] <=5) ?
     2 : 3) :
 1;
 
