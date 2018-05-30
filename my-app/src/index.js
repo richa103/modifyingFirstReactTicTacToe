@@ -10,6 +10,8 @@ function Square(props) {
   );
 }
 
+
+
 class Board extends React.Component {
 
 
@@ -56,6 +58,7 @@ class Game extends React.Component {
       stepNumber: 0,  //To know the move number
       xIsNext: true,
       currentI: Array(0).fill(null), // So we know what the last square filled was
+      color: Array(10).fill('button-regular'),
     }
   };
     handleClick(i) {
@@ -81,10 +84,12 @@ class Game extends React.Component {
     }
 
   jumpTo(step) {
+    var color = Array(10).fill('button-regular'); //reset color each time back to gray
+    color[step] = 'button-highlight'; //highlight selected button
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
-    //currentI: this.state.currentI.slice(0, step), //go back to last game move, with which squared filled
+      color: color, //rerender the button selected in yellow
     });
   }
 
@@ -95,7 +100,7 @@ const winner = calculateWinner(current.squares);
 
 
 const currentI = this.state.currentI; //update current squared filled on the last move made
-
+const color = this.state.color;
 const moves = history.map((step, move) => {
 const col = currentI[move -1] % 3 + 1; //calculate column
 const row = (currentI[move - 1] > 2) ? //calculate row
@@ -108,8 +113,9 @@ const row = (currentI[move - 1] > 2) ? //calculate row
   'Go to game start';
 
 return (
+
   <li key={move}>
-    <button onClick={() => this.jumpTo(move)}>
+    <button className= {color[move]} onClick={() => this.jumpTo(move)}>
 {desc}</button>
   </li>
 );
