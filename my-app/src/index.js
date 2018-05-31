@@ -10,6 +10,12 @@ function Square(props) {
   );
 }
 
+function ReverseOL(props) { // reverses numbering of the ol for the move buttons
+  return(props.descending ?
+    <ol> {props.moves}</ol> :
+    <ol reversed> {props.moves}</ol>);
+
+}
 
 
 class Board extends React.Component {
@@ -63,6 +69,7 @@ class Game extends React.Component {
       xIsNext: true,
       currentI: Array(0).fill(null), // So we know what the last square filled was
       color: Array(10).fill('button-regular'),
+      descending: true,
     }
   };
     handleClick(i) {
@@ -90,6 +97,7 @@ class Game extends React.Component {
   jumpTo(step) {
     var color = Array(10).fill('button-regular'); //reset color each time back to gray
     color[step] = 'button-highlight'; //highlight selected button
+
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
@@ -97,15 +105,24 @@ class Game extends React.Component {
     });
   }
 
+handleClickMoves(){
+  let descending = this.state.descending;
+
+  this.setState({
+    descending: !descending,
+  });
+}
+
+
   render() {
 const history = this.state.history;
 const current = history[this.state.stepNumber];
 const winner = calculateWinner(current.squares);
-
+const descending = this.state.descending;
 
 const currentI = this.state.currentI; //update current squared filled on the last move made
 const color = this.state.color;
-const moves = history.map((step, move) => {
+let moves = history.map((step, move) => {
 const col = currentI[move -1] % 3 + 1; //calculate column
 const row = (currentI[move - 1] > 2) ? //calculate row
   ((currentI[move - 1] <=5) ?
@@ -123,9 +140,9 @@ return (
 {desc}</button>
   </li>
 );
+
 });
-
-
+moves = descending ? moves : moves.reverse(); //If descending is false, it must be ascending. Then moves is reversed to ascending.
 let status;
 if(winner){
   status = 'Winner: ' + winner;
@@ -145,7 +162,13 @@ if(winner){
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <br/>
+          <button onClick={() => this.handleClickMoves()}>
+            Reverse </button>
+          <ReverseOL    //pass to functional component, to see if ol numbering needs to be reversed
+            moves = {moves}
+            descending = {descending}
+          />
         </div>
       </div>
     );
