@@ -4,7 +4,7 @@ A simple Tic-Tac-Toe game, I will be next implememnting the challenges the tutor
 Ordered in increasing difficulty, and the order for which I will tackle the problem.
 1. Display the location for each move in the format (col, row) in the move history list. X
 2. Bold the currently selected item in the move list. X
-3. Rewrite Board to use two loops to make the squares instead of hardcoding them.
+3. Rewrite Board to use two loops to make the squares instead of hardcoding them. X
 4. Add a toggle button that lets you sort the moves in either ascending or descending order.
 5. When someone wins, highlight the three squares that caused the win.
 6. When no one wins, display a message about the result being a draw.

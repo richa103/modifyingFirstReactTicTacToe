@@ -23,26 +23,30 @@ class Board extends React.Component {
      />
    );
   }
+renderingSquares(){
+  const squareRendering = [], //For storing an array of renderSquare() function
+  list= []; // For storing an array of React div elements, with squareRendering as a component child for each element in the array
+  var index = 0;
+
+  for(let x = 0; x < 3; x++){
+    for(let y = 0; y < 3; y++){
+      squareRendering.push(this.renderSquare(index));
+      index++;
+    }
+      list.push(React.createElement('div',{className: 'boardRow'},squareRendering.slice(index-3,index+1))); // slicing specifies the # of squares = 3 for each row
+  }
+
+
+  return(list); //returns the array of React elements
+}
+
 
   render() {
 
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+
+        {this.renderingSquares()}
       </div>
     );
   }
