@@ -1,9 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-
+/*Comments for Square: if winningLines is not null, then this square is one of the three squares that won the game,
+then the button highlight class is passed, and the button is highlighted, else it is not
+*/
 function Square(props) {
-  return (
+  return (props.winningLines ?
+    <button className="square button-highlight" onClick={props.onClick}>
+      {props.value}
+    </button> :
     <button className="square" onClick={props.onClick}>
       {props.value}
     </button>
@@ -19,15 +24,29 @@ function ReverseOL(props) { // reverses numbering of the ol for the move buttons
 
 
 class Board extends React.Component {
-
-
+/*Comments for renderSquare:
+If there is a winner, winningLines has a value
+if that square is equal to the position of the winning square,
+then winningLines gets passed with a value to the corresponding square.
+else winningLines[index] does not equal that square, and winningLine value passed is null.
+Else else, In the case that there is not a winner and winnigLine array is null, winningLines passed is null
+winningLine is passed to square in the form of a prop*/
   renderSquare(i){
-    return (
-
-    <Square value={this.props.squares[i]}
-    onClick={() => this.props.onClick(i)}
-     />
-   );
+    return(this.props.winningLines ?
+    (this.props.winningLines[1] === i || this.props.winningLines[2] === i || this.props.winningLines[3] === i
+    ?
+      <Square value={this.props.squares[i]}
+      winningLines = {this.props.winningLines}
+      onClick={() => this.props.onClick(i)}
+      /> :
+        <Square value={this.props.squares[i]}
+        winningLines = {null}
+        onClick={() => this.props.onClick(i)}
+        />)  :
+      <Square value={this.props.squares[i]}
+      winningLines = {null}
+      onClick={() => this.props.onClick(i)}
+      />)
   }
 renderingSquares(){
   const squareRendering = [], //For storing an array of renderSquare() function
@@ -145,7 +164,8 @@ return (
 moves = descending ? moves : moves.reverse(); //If descending is false, it must be ascending. Then moves is reversed to ascending.
 let status;
 if(winner){
-  status = 'Winner: ' + winner;
+  status = 'Winner: ' + winner[0];
+
 } else {
   status = 'Next player: ' + (this.state.xIsNext ?
   'X' : 'O');
@@ -157,6 +177,7 @@ if(winner){
         <div className="game-board">
           <Board
             squares = {current.squares}
+            winningLines = {winner}
             onClick = {(i) => this.handleClick(i)}
           />
         </div>
@@ -196,7 +217,8 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      const winningLines = [squares[a],a,b,c];
+      return winningLines;
     }
   }
   return null;
