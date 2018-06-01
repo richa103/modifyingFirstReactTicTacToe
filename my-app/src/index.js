@@ -14,6 +14,20 @@ function Square(props) {
     </button>
   );
 }
+function Status(props){
+  var isNotFull = true;
+  const winningLines = props.winningLines;
+  const filledStatus = 'The game was a draw';
+  for(let i = 0; i < 9; i++){
+    if(!props.squares[i]){
+      isNotFull = false;
+    }
+  }
+  return((isNotFull && !winningLines)?
+    <div>{filledStatus}</div> :
+    <div>{props.stat}</div>
+  );
+}
 
 function ReverseOL(props) { // reverses numbering of the ol for the move buttons
   return(props.descending ?
@@ -182,7 +196,11 @@ if(winner){
           />
         </div>
         <div className="game-info">
-          <div>{status}</div>
+          <Status
+                  stat = {status}
+                  squares = {current.squares}
+                  winningLines = {winner}
+          />
           <br/>
           <button onClick={() => this.handleClickMoves()}>
             Reverse </button>
